@@ -1,0 +1,14 @@
+{
+  "name": "phil-dental-clinic",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Phil Dental Clinic \u2014 plain HTML, CSS, and vanilla JavaScript",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/serve.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.12"
+  }
+}

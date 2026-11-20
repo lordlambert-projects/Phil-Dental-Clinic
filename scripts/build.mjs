@@ -1,0 +1,14 @@
+import { build } from "esbuild";
+import { cp, rm, mkdir, readFile, writeFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+process.chdir(fileURLToPath(new URL("../", import.meta.url)));
+await rm("dist", {recursive:true, force:true});
+await mkdir("dist/assets/build", {recursive:true});
+await cp("public", "dist", {recursive:true});
+const result = await build({entryPoints:{app:"src/js/app.js",site:"src/css/entry.css"},outdir:"dist/assets/build",bundle:true,minify:true,format:"esm",target:["es2022"],entryNames:"[name]-[hash]",metafile:true,external:["/assets/*"],legalComments:"none"});
+const outputs=Object.keys(result.metafile.outputs);
+const js=outputs.find(p=>p.endsWith(".js")), css=outputs.find(p=>p.endsWith(".css"));
+let html=await readFile("index.html","utf8");
+html=html.replace("__CSS__",css.replace(/^dist\//,"")).replace("__JS__",js.replace(/^dist\//,""));
+await writeFile("dist/index.html",html);
+console.log(`Built Phil Dental Clinic: ${js}, ${css}`);
